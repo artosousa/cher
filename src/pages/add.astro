@@ -1,0 +1,60 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Add Friend">
+  <h1>Add a Friend</h1>
+  <form id="addFriendForm">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" required />
+
+    <label for="age">Age</label>
+    <input type="number" name="age" id="age" required />
+
+    <label for="isBestFriend">Best Friend?</label>
+    <input type="checkbox" name="isBestFriend" id="isBestFriend" />
+
+    <button type="submit">Add Friend</button>
+  </form>
+</Layout>
+
+<script>
+  interface FriendData {
+    name: string;
+    age: number;
+    isBestFriend: boolean;
+  }
+
+  const addFriend = async (friendData: FriendData) => {
+    const idToken = localStorage.getItem("idToken"); // Retrieve the token from local storage
+    const response = await fetch("/api/friends", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`,
+      },
+      body: JSON.stringify(friendData),
+    });
+
+    if (!response.ok) {
+      console.error("Failed to add friend:", await response.text());
+    } else {
+      console.log("Friend added successfully!");
+      window.location.href = "/dashboard"; // Redirect to the dashboard after successful addition
+    }
+  };
+
+  const form = document.getElementById("addFriendForm") as HTMLFormElement; // Type assertion
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault(); // Prevent the default form submission
+
+    const formData = new FormData(form);
+    const friendData: FriendData = {
+      name: formData.get("name")?.toString() || "",
+      age: parseInt(formData.get("age")?.toString() || "0", 10),
+      isBestFriend: formData.get("isBestFriend") === "on",
+    };
+
+    await addFriend(friendData); // Call the addFriend function with the gathered data
+  });
+</script>

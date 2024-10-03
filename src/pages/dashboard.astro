@@ -1,27 +1,60 @@
 ---
 import { app } from "../firebase/server";
-import { getAuth } from "firebase-admin/auth";
+import { getFirestore } from "firebase-admin/firestore";
 import Layout from "../layouts/Layout.astro";
+import { getAuth } from "firebase-admin/auth";
 
+interface Friend {
+  id: string;
+  name: string;
+  age: number;
+  isBestFriend: boolean;
+}
+
+const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* Check current session */
-if (!Astro.cookies.has("__session")) {
-  return Astro.redirect("/");
-}
-const sessionCookie = Astro.cookies.get("__session")?.value ?? "";
-const decodedCookie = await auth.verifySessionCookie(sessionCookie);
-const user = await auth.getUser(decodedCookie.uid);
+let userId;
 
-if (!user) {
-  return Astro.redirect("/");
+if (Astro.cookies.has("__session")) {
+  const sessionCookie = Astro.cookies.get("__session")?.value ?? "";
+  const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+  userId = decodedCookie.uid; 
 }
+
+if (!userId) {
+  throw new Error("User not authenticated");
+}
+
+const friendsRef = db.collection("users").doc(userId).collection("friends");
+const friendsSnapshot = await friendsRef.get();
+
+const friends = friendsSnapshot.docs.map((doc) => ({
+  id: doc.id,
+  ...doc.data(),
+})) as Friend[];
 ---
 
-<Layout title="dashboard">
-  <h1>Welcome {user.displayName}</h1>
-  <p>We are happy to see you here</p>
-  <form action="/api/auth/signout">
+<Layout title="My friends">
+  <h1>Friends</h1>
+  <ul>
+    {
+      friends.map((friend) => {
+        return (
+          <li>
+            <a href={`/friend/${friend.id}`}>{friend.name}</a>
+            <span>({friend.age})</span>
+            <strong>{friend.isBestFriend ? "Bestie" : "Friend"}</strong>
+            <a href={`/edit/${friend.id}`}>Edit</a>
+          </li>
+        );
+      })
+    }
+  </ul>
+  <a href="/add">Add friend</a> 
+  <form action="/api/auth/signout" method="GET">
     <button type="submit">Sign out</button>
   </form>
+
+  
 </Layout>
