@@ -7,14 +7,14 @@ const auth = getAuth(app);
 
 /* Check current session */
 if (!Astro.cookies.has("__session")) {
-  return Astro.redirect("/signin");
+  return Astro.redirect("/");
 }
 const sessionCookie = Astro.cookies.get("__session")?.value ?? "";
 const decodedCookie = await auth.verifySessionCookie(sessionCookie);
 const user = await auth.getUser(decodedCookie.uid);
 
 if (!user) {
-  return Astro.redirect("/signin");
+  return Astro.redirect("/");
 }
 ---
 
