@@ -50,9 +50,9 @@ import Layout from "../layouts/Layout.astro";
 
     const formData = new FormData(form);
     const friendData: FriendData = {
-      name: formData.get("name")?.toString() || "",
-      age: parseInt(formData.get("age")?.toString() || "0", 10),
-      isBestFriend: formData.get("isBestFriend") === "on",
+        name: formData.get("name")?.toString() || "",
+        age: parseInt(formData.get("age")?.toString() || "0", 10),
+        isBestFriend: formData.get("isBestFriend") === "on",
     };
 
     await addFriend(friendData); // Call the addFriend function with the gathered data

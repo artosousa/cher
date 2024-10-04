@@ -42,6 +42,7 @@ const friends = friendsSnapshot.docs.map((doc) => ({
       friends.map((friend) => {
         return (
           <li>
+            {console.log(friend)}
             <a href={`/friend/${friend.id}`}>{friend.name}</a>
             <span>({friend.age})</span>
             <strong>{friend.isBestFriend ? "Bestie" : "Friend"}</strong>
