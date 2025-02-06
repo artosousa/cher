@@ -1,0 +1,25 @@
+/*this is nothing */
+.completed {
+    background-color: #4caf50;
+    color: white;
+}
+
+/* Media query for responsive styling */
+@media (min-width: 0px) {
+
+    .completed,
+    .completed:hover {
+        background-color: #4caf50 !important;
+        /* Green background for small screens */
+    }
+}
+
+/* Optional: Media query for larger screens */
+@media (min-width: 768px) {
+
+    .completed,
+    .completed:hover {
+        background-color: #4caf50;
+        /* Keep green on larger screens */
+    }
+}

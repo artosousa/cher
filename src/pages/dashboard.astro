@@ -1,61 +1,151 @@
 ---
 import { app } from "../firebase/server";
-import { getFirestore } from "firebase-admin/firestore";
-import Layout from "../layouts/Layout.astro";
+import { getFirestore, Timestamp } from "firebase-admin/firestore"; 
 import { getAuth } from "firebase-admin/auth";
+import Layout from "../layouts/Layout.astro";
+import CalendarComponent from "../components/CalendarComponent.tsx"; 
+import '../styles/global.css'
 
-interface Friend {
+interface Task {
   id: string;
   name: string;
-  age: number;
-  isBestFriend: boolean;
+  isComplete: boolean;
+  completedAt?: Timestamp;
 }
 
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-let userId;
+let userId: string | undefined;
 
 if (Astro.cookies.has("__session")) {
   const sessionCookie = Astro.cookies.get("__session")?.value ?? "";
   const decodedCookie = await auth.verifySessionCookie(sessionCookie);
-  userId = decodedCookie.uid; 
+  userId = decodedCookie.uid;
 }
 
 if (!userId) {
   throw new Error("User not authenticated");
 }
 
-const friendsRef = db.collection("users").doc(userId).collection("friends");
-const friendsSnapshot = await friendsRef.get();
+const tasksRef = db.collection("users").doc(userId).collection("tasks");
+const tasksSnapshot = await tasksRef.get();
 
-const friends = friendsSnapshot.docs.map((doc) => ({
-  id: doc.id,
-  ...doc.data(),
-})) as Friend[];
+const tasks: Task[] = tasksSnapshot.docs.map((doc) => {
+  const data = doc.data();
+  return {
+    id: doc.id,
+    name: data.name,
+    isComplete: data.isComplete,
+    completedAt: data.completedAt instanceof Timestamp ? data.completedAt : null, 
+  } as Task;
+});
+
+const completedDates = tasks
+  .filter((task) => task.isComplete && task.completedAt)
+  .map((task) => {
+    if (task.completedAt) {
+      return task.completedAt.toDate().toLocaleDateString();
+    }
+    return '';
+  })
+  .filter((date): date is string => date !== ''); 
+
+// Function to update completed task dates
+const updateCompletedDates = async () => {
+  const updatedTasksSnapshot = await tasksRef.get();
+  const updatedCompletedDates = updatedTasksSnapshot.docs
+    .map((doc) => {
+      const data = doc.data();
+      if (data.isComplete && data.completedAt instanceof Timestamp) {
+        return data.completedAt.toDate().toLocaleDateString();
+      }
+      return '';
+    })
+    .filter((date): date is string => date !== '');
+
+  return updatedCompletedDates;
+};
 ---
 
-<Layout title="My friends">
-  <h1>Friends</h1>
+<Layout title="My tasks">
+  <h1>My Tasks</h1>
   <ul>
-    {
-      friends.map((friend) => {
-        return (
-          <li>
-            {console.log(friend)}
-            <a href={`/friend/${friend.id}`}>{friend.name}</a>
-            <span>({friend.age})</span>
-            <strong>{friend.isBestFriend ? "Bestie" : "Friend"}</strong>
-            <a href={`/edit/${friend.id}`}>Edit</a>
-          </li>
-        );
-      })
-    }
+    {tasks.map((task) => (
+      <li data-key={task.id} class={task.isComplete ? "line-through" : ""}>
+        <input
+          id={task.name.replace(/\s+/g, '')}
+          type="checkbox"
+          checked={task.isComplete}
+          data-id={task.id}
+          class="task-checkbox"
+          onchange={`updateTaskStatus(event, '${task.id}')`} 
+        />
+        <label for={task.name.replace(/\s+/g, '')}>{task.name}</label>
+      </li>
+    ))}
   </ul>
-  <a href="/add">Add friend</a> 
+
+  <a href="/add">Add New Task</a>
+
   <form action="/api/auth/signout" method="GET">
     <button type="submit">Sign out</button>
   </form>
 
+  <h2>Task Completion Calendar</h2>
+  <CalendarComponent 
+    completedDates={completedDates} 
+    onUpdateCompletedDates={async () => {
+      const updatedDates = await updateCompletedDates();
+      // Trigger the update in the parent component
+      document.dispatchEvent(new CustomEvent('update-completed-dates', { detail: updatedDates }));
+    }}
+  />
+
+  <script>
+  // This function will be responsible for updating the task status
+  async function updateTaskStatus(event: Event, taskId: string) {
+    console.log(location.href)
+    const target = event.target as HTMLInputElement;
+    const isComplete = target.checked;
+
+    const payload = { 
+      isComplete,
+      completedAt: isComplete ? new Date() : null, 
+    };
+
+    try {
+      const response = await fetch(`/api/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update task");
+      } else {
+        location.reload()
+      }
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+  }
+
   
+  // Attach the onchange event to the task checkboxes dynamically (in case you have many tasks)
+  document.addEventListener("DOMContentLoaded", () => {
+    const checkboxes = document.querySelectorAll(".task-checkbox");
+
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", (e) => {
+        const taskId = (e.target as HTMLInputElement).getAttribute("data-id");
+        if (taskId) {
+          updateTaskStatus(e, taskId); // Call updateTaskStatus function when checkbox changes
+        }
+      });
+    });
+  });
+</script>
+
+
 </Layout>

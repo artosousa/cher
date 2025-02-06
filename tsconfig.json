@@ -1,3 +1,10 @@
 {
-  "extends": "astro/tsconfigs/strict"
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "jsx": "react-jsx", // This enables React JSX support
+    "moduleResolution": "node", // Ensures modules are resolved correctly
+    "esModuleInterop": true, // Allows default imports from modules with no default export
+    "strict": true, // Enables strict mode
+    "skipLibCheck": true // Skip type checking of declaration files
+  }
 }

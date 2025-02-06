@@ -2,59 +2,85 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Add Friend">
-  <h1>Add a Friend</h1>
-  <form id="addFriendForm">
-    <label for="name">Name</label>
+<Layout title="Add Task">
+  <h1>Add a Task</h1>
+  <form id="addTaskForm" enctype="multipart/form-data">
+    <label for="name">Task</label>
     <input type="text" name="name" id="name" required />
 
-    <label for="age">Age</label>
-    <input type="number" name="age" id="age" required />
-
-    <label for="isBestFriend">Best Friend?</label>
-    <input type="checkbox" name="isBestFriend" id="isBestFriend" />
-
-    <button type="submit">Add Friend</button>
+    <!-- Submit button -->
+    <button type="submit">Add Task</button>
   </form>
 </Layout>
 
 <script>
-  interface FriendData {
+  // Define the structure of task data
+  interface TaskData {
     name: string;
-    age: number;
-    isBestFriend: boolean;
   }
 
-  const addFriend = async (friendData: FriendData) => {
-    const idToken = localStorage.getItem("idToken"); // Retrieve the token from local storage
-    const response = await fetch("/api/friends", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${idToken}`,
-      },
-      body: JSON.stringify(friendData),
-    });
+  // Function to handle adding a new task
+  const addTask = async (taskData: TaskData) => {
+    // Retrieve the Firebase token from local storage (assumed to be stored after login)
+    const idToken = localStorage.getItem("idToken");
 
-    if (!response.ok) {
-      console.error("Failed to add friend:", await response.text());
-    } else {
-      console.log("Friend added successfully!");
-      window.location.href = "/dashboard"; // Redirect to the dashboard after successful addition
+    if (!idToken) {
+      alert("User is not authenticated");
+      return;
+    }
+
+    // Create FormData to handle multipart form submission
+    const formData = new FormData();
+    formData.append("name", taskData.name);
+
+    try {
+      // Send the form data to the backend API (previously implemented)
+      const response = await fetch("/api/tasks", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${idToken}`, // Include the auth token
+        },
+        body: formData, // Pass the FormData as the body
+      });
+
+      // Handle response status
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Failed to add task:", errorText);
+        alert(`Failed to add task: ${errorText}`);
+      } else {
+        console.log("Task added successfully!");
+        window.location.href = "/dashboard"; // Redirect on success
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      alert("Error adding Task, please try again.");
     }
   };
 
-  const form = document.getElementById("addFriendForm") as HTMLFormElement; // Type assertion
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // Prevent the default form submission
+  // TypeScript: Ensure the form element is treated as an HTMLFormElement
+  const form = document.getElementById("addTaskForm") as HTMLFormElement;
 
-    const formData = new FormData(form);
-    const friendData: FriendData = {
-        name: formData.get("name")?.toString() || "",
-        age: parseInt(formData.get("age")?.toString() || "0", 10),
-        isBestFriend: formData.get("isBestFriend") === "on",
-    };
+  if (form) {
+    // On form submission, prevent default action and gather data
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault(); // Prevent form default submission
 
-    await addFriend(friendData); // Call the addFriend function with the gathered data
-  });
+      const formData = new FormData(form); // Collect form data
+      const name = formData.get("name")?.toString();
+
+      if (!name) {
+        alert("Task name is required");
+        return;
+      }
+
+      // Create a TaskData object to send to the addTask function
+      const taskData: TaskData = {
+        name,
+      };
+
+      // Call the addTask function with the task data
+      await addTask(taskData);
+    });
+  }
 </script>

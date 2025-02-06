@@ -4,10 +4,9 @@ import { app } from "../../firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
 import { getAuth } from "firebase-admin/auth";
 
-interface Friend {
+interface Task {
   name: string;
-  age: number;
-  isBestFriend: boolean;
+  isComplete: boolean;
 }
 
 const { id } = Astro.params;
@@ -39,37 +38,36 @@ if (!userId) {
 }
 
 const db = getFirestore(app);
-const friendsRef = db.collection("users").doc(userId).collection("friends"); // Pointing to user's friends collection
-const friendSnapshot = await friendsRef.doc(id).get();
+const tasksRef = db.collection("users").doc(userId).collection("tasks"); // Pointing to user's friends collection
+const taskSnapshot = await tasksRef.doc(id).get();
 
-if (!friendSnapshot.exists) {
+if (!taskSnapshot.exists) {
   return Astro.redirect("/404");
 }
 
-const friend = friendSnapshot.data() as Friend;
+const task = taskSnapshot.data() as Task;
 ---
 
-<Layout title={`Edit ${friend.name}`}>
-  <h1>Edit {friend.name}</h1>
+<Layout title={`Edit ${task.name}`}>
+  <h1>Edit {task.name}</h1>
   <p>Here you can edit or delete your friend's data.</p>
-  <form method="post" action={`/api/friends/${id}`}>
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" value={friend.name} required />
-    
-    <label for="age">Age</label>
-    <input type="number" id="age" name="age" value={friend.age} required />
-    
-    <label for="isBestFriend">Is best friend?</label>
+  <form method="post" action={`/api/tasks/${id}`}>
+    <label for="isComplete" hidden>Completed</label>
     <input
       type="checkbox"
-      id="isBestFriend"
-      name="isBestFriend"
-      checked={friend.isBestFriend}
+      id="isComplete"
+      name="isComplete"
+      checked={task.isComplete}
     />
+    <label for="name">Task Name:</label>
+    <input type="text" id="name" name="name" value={task.name} required />
     
-    <button type="submit">Edit friend</button>
+    
+    
+    <button type="submit">Save</button>
+      
   </form>
-  <button type="button" id="delete-document">Delete</button>
+<button type="button" id="delete-document">Delete</button>
 </Layout>
 
 <script>
@@ -85,7 +83,7 @@ const friend = friendSnapshot.data() as Friend;
       window.location.assign(response.url);
     } else {
       // Optionally, handle error case
-      console.error("Failed to delete friend:", await response.text());
+      console.error("Failed to delete task:", await response.text());
     }
   });
 </script>

@@ -4,10 +4,8 @@ import { app } from "../../firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
 import { getAuth } from "firebase-admin/auth";
 
-interface Friend {
+interface Task {
   name: string;
-  age: number;
-  isBestFriend: boolean;
 }
 
 const { id } = Astro.params;
@@ -39,20 +37,18 @@ if (!userId) {
 }
 
 const db = getFirestore(app);
-const friendsRef = db.collection("users").doc(userId).collection("friends"); // Pointing to user's friends collection
+const tasksRef = db.collection("users").doc(userId).collection("tasks"); // Pointing to user's Task's collection
 
 // Ensure that id is defined before using it
-const friendSnapshot = await friendsRef.doc(id).get();
+const taskSnapshot = await tasksRef.doc(id).get();
 
-if (!friendSnapshot.exists) {
+if (!taskSnapshot.exists) {
   return Astro.redirect("/404");
 }
 
-const friend = friendSnapshot.data() as Friend;
+const task = taskSnapshot.data() as Task;
 ---
 
-<Layout title={friend.name}>
-  <h1>{friend.name}</h1>
-  <p>Age: {friend.age}</p>
-  <p>Is best friend: {friend.isBestFriend ? "Yes" : "No"}</p>
+<Layout title={task.name}>
+  <h1>{task.name}</h1>
 </Layout>
