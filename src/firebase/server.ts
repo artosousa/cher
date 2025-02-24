@@ -23,9 +23,10 @@ const initApp = () => {
   console.log(import.meta.env)
   if (import.meta.env.PROD) {
     console.info("PROD env detected. Using default service account");
-    return initializeApp();
+    return initializeApp({
+      credential: cert(serviceAccount as ServiceAccount),
+    });
   }
-  console.info("Loading service account from env.");
   return initializeApp({
     credential: cert(serviceAccount as ServiceAccount),
   });
