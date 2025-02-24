@@ -17,7 +17,11 @@ const CalendarComponent = ({ completedDates, onUpdateCompletedDates }: CalendarP
 
   const tileClassName = ({ date }: { date: Date }) => {
     const normalizedDate = normalizeDate(date);
-  
+    console.log({
+      dates,
+      normalizedDate
+    });
+    console.log(normalizedDate)
     return dates.includes(normalizedDate) ? 'completed' : '';
   };
 
