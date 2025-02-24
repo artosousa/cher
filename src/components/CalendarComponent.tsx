@@ -8,21 +8,22 @@ interface CalendarProps {
 }
 
 const CalendarComponent = ({ completedDates, onUpdateCompletedDates }: CalendarProps) => {
-  console.log('Received completedDates:', completedDates);
   const [date, setDate] = useState<Date | [Date, Date] | null>(new Date());
   const [dates, setDates] = useState(completedDates); // Store completed dates in state
-
+  const formattedDates = dates.map(date => {
+    const parsedDate = new Date(date);
+    return parsedDate.toISOString().split('T')[0]; // Extracts YYYY-MM-DD
+  });
 
   const normalizeDate = (d: Date) => d.toISOString().split('T')[0];
 
   const tileClassName = ({ date }: { date: Date }) => {
     const normalizedDate = normalizeDate(date);
     console.log({
-      dates,
+      formattedDates,
       normalizedDate
     });
-    console.log(normalizedDate)
-    return dates.includes(normalizedDate) ? 'completed' : '';
+    return formattedDates.includes(normalizedDate) ? 'completed' : '';
   };
 
   const handleDateChange = (newDate: Date | [Date, Date] | null) => {
