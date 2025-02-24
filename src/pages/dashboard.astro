@@ -70,7 +70,7 @@ const updateCompletedDates = async () => {
 
 <Layout title="My tasks">
   <h1>My Tasks</h1>
-  <ul>
+  <ul id="task-list">
     {tasks.map((task) => (
       <li data-key={task.id} class={task.isComplete ? "line-through" : ""}>
         <input
@@ -91,7 +91,7 @@ const updateCompletedDates = async () => {
   <form action="/api/auth/signout" method="GET">
     <button type="submit">Sign out</button>
   </form>
-
+<hr />
   <h2>Task Completion Calendar</h2>
   <CalendarComponent 
     completedDates={completedDates} 
@@ -103,8 +103,9 @@ const updateCompletedDates = async () => {
   />
 
   <script>
+    
   // This function will be responsible for updating the task status
-  async function updateTaskStatus(event: Event, taskId: string) {
+  (window as any).updateTaskStatus = async function (event: Event, taskId: string) {
     console.log(location.href)
     const target = event.target as HTMLInputElement;
     const isComplete = target.checked;
@@ -134,16 +135,14 @@ const updateCompletedDates = async () => {
   
   // Attach the onchange event to the task checkboxes dynamically (in case you have many tasks)
   document.addEventListener("DOMContentLoaded", () => {
-    const checkboxes = document.querySelectorAll(".task-checkbox");
-
-    checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener("change", (e) => {
-        const taskId = (e.target as HTMLInputElement).getAttribute("data-id");
-        if (taskId) {
-          updateTaskStatus(e, taskId); // Call updateTaskStatus function when checkbox changes
-        }
-      });
-    });
+    const taskList = document.getElementById('task-list')
+    taskList?.addEventListener('click', (e) => {
+      const taskId = (e.target as HTMLInputElement).getAttribute("data-id");
+      if (taskId) {
+        (window as any).updateTaskStatus(e, taskId);
+      }
+      console.log(e.target)
+    })
   });
 </script>
 
