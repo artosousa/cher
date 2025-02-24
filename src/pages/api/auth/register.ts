@@ -15,15 +15,18 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     return new Response("Missing form data", { status: 400 });
   }
 
-  /* Create user */
   try {
-    await auth.createUser({
+    console.log("Attempting to create user with email:", email);
+    const userRecord = await auth.createUser({
       email,
       password,
       displayName: name,
     });
-  } catch (error: any) {
+    console.log("User created:", userRecord);
+  } catch (error) {
+    console.error("Error creating user:", error);
     return new Response("Something went wrong", { status: 400 });
   }
+  
   return redirect("/");
 };
