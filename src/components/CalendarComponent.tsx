@@ -12,6 +12,7 @@ const CalendarComponent = ({ completedDates, onUpdateCompletedDates }: CalendarP
   const [dates, setDates] = useState(completedDates); // Store completed dates in state
 
   useEffect(() => {
+    console.log(`Completed Dats: ${completedDates}`); 
     // Whenever the completedDates prop changes, update the local state and notify parent
     setDates(completedDates);
   }, [completedDates]);

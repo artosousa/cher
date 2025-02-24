@@ -3,7 +3,6 @@ import { app } from "../firebase/server";
 import { getFirestore, Timestamp } from "firebase-admin/firestore"; 
 import { getAuth } from "firebase-admin/auth";
 import Layout from "../layouts/Layout.astro";
-import CalendarComponent from "../components/CalendarComponent.tsx"; 
 import '../styles/global.css'
 
 interface Task {
@@ -93,14 +92,7 @@ const updateCompletedDates = async () => {
   </form>
 <hr />
   <h2>Task Completion Calendar</h2>
-  <CalendarComponent 
-    completedDates={completedDates} 
-    onUpdateCompletedDates={async () => {
-      const updatedDates = await updateCompletedDates();
-      // Trigger the update in the parent component
-      document.dispatchEvent(new CustomEvent('update-completed-dates', { detail: updatedDates }));
-    }}
-  />
+  
 
   <script>
     
