@@ -13,9 +13,11 @@ if (Astro.cookies.has("__session")) {
     return Astro.redirect("/dashboard");
   }
 }
+
 ---
 
 <Layout title="Sign in">
+  
   <h1>Sign in</h1>
   <p>New here? <a href="/register">Create an account</a></p>
   <form id="signin-form">
@@ -29,6 +31,7 @@ if (Astro.cookies.has("__session")) {
 </Layout>
 
 <script>
+  console.log(import.meta.env)
   import {
     getAuth,
     inMemoryPersistence,

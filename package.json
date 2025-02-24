@@ -18,6 +18,7 @@
     "dotenv": "^16.4.7",
     "firebase": "^10.14.0",
     "firebase-admin": "^12.6.0",
+    "netlify-cli": "^19.0.0",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
     "react-dom": "^19.0.0",
