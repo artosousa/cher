@@ -94,6 +94,7 @@ const updateCompletedDates = async () => {
 <hr />
   <h2>Task Completion Calendar</h2>
   <CalendarComponent 
+    client:load
     completedDates={completedDates} 
     onUpdateCompletedDates={async () => {
       const updatedDates = await updateCompletedDates();
