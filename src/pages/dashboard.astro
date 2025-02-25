@@ -92,14 +92,14 @@ const updateCompletedDates = async () => {
             {tasks.map((task) => (
               <li data-key={task.id} class={task.isComplete ? "line-through" : ""}>
                 <input
-                  id={task.name.replace(/\s+/g, '')}
+                  id={task.name?.replace(/\s+/g, '')}
                   type="checkbox"
                   checked={task.isComplete}
                   data-id={task.id}
                   class="task-checkbox"
                   onchange={`updateTaskStatus(event, '${task.id}')`} 
                 />
-                <label for={task.name.replace(/\s+/g, '')}>{task.name}</label>
+                <label for={task.name?.replace(/\s+/g, '')}>{task.name ?? 'Unnamed Task'}</label>
               </li>
             ))}
           </ul>

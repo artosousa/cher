@@ -20,7 +20,7 @@ import Logo from '../images/logo.svg'
       <div class="bg-white w-full max-w-[90%]  shadow-md flex flex-col items-center rounded-md p-8">
         <h1 class="w-full text-lg font-bold text-[#003246] border-b-1 border-[#003246] pb-2 mb-4">Add a Task</h1>
         <form id="addTaskForm" enctype="multipart/form-data">
-          <input autofocus placeholder="Task Name" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" type="text" name="task" id="task" required />
+          <input autofocus placeholder="Task Name" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" type="text" name="name" id="name" required />
 
           <!-- Submit button -->
           <button class="w-full mt-4 mb-4 rounded-md bg-[#003246] text-white p-3 text-l cursor-pointer hover:bg-[#095870] "  type="submit">Add Task</button>
@@ -35,9 +35,9 @@ import Logo from '../images/logo.svg'
 <script>
   // Define the structure of task data
   interface TaskData {
-    task: string;
+    name: string;
   }
-  const taskInput = document.getElementById('task')
+  const taskInput = document.getElementById('name')
   console.log(taskInput)
   document.addEventListener("DOMContentLoaded", () => {
     taskInput?.click()
@@ -55,7 +55,7 @@ import Logo from '../images/logo.svg'
 
     // Create FormData to handle multipart form submission
     const formData = new FormData();
-    formData.append("task", taskData.task);
+    formData.append("name", taskData.name);
 
     try {
       // Send the form data to the backend API (previously implemented)
@@ -91,16 +91,16 @@ import Logo from '../images/logo.svg'
       e.preventDefault(); // Prevent form default submission
 
       const formData = new FormData(form); // Collect form data
-      const task = formData.get("task")?.toString();
+      const name = formData.get("name")?.toString();
 
-      if (!task) {
+      if (!name) {
         alert("Task name is required");
         return;
       }
 
       // Create a TaskData object to send to the addTask function
       const taskData: TaskData = {
-        task,
+        name,
       };
 
       // Call the addTask function with the task data
