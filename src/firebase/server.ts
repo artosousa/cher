@@ -20,7 +20,6 @@ const serviceAccount = {
 const activeApps = getApps();
 
 const initApp = () => {
-  console.log(import.meta.env)
   if (import.meta.env.PROD) {
     console.info("PROD env detected. Using default service account");
     return initializeApp({
