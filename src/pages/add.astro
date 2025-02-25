@@ -39,7 +39,10 @@ import Logo from '../images/logo.svg'
   }
   const taskInput = document.getElementById('task')
   console.log(taskInput)
-  taskInput?.focus()
+  document.addEventListener("DOMContentLoaded", () => {
+    taskInput?.focus()
+  })
+  
   // Function to handle adding a new task
   const addTask = async (taskData: TaskData) => {
     // Retrieve the Firebase token from local storage (assumed to be stored after login)
