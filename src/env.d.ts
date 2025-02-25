@@ -21,6 +21,7 @@ interface ImportMetaEnv {
   readonly PUBLIC_FIREBASE_STORAGE_BUCKET: string;
   readonly PUBLIC_FIREBASE_MESSAGING_SENDER_ID: string;
   readonly PUBLIC_FIREBASE_APP_ID: string;
+  readonly VITE_GOOGLE_CLIENT_ID: string;
 }
 
 interface ImportMeta {

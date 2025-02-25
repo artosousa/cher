@@ -3,7 +3,8 @@
 import { app } from "../firebase/server";
 import { getAuth } from "firebase-admin/auth";
 import Layout from "../layouts/Layout.astro";
-
+import { Image } from 'astro:assets';
+import Logo from '../images/logo.svg'
 // Check if the user is authenticated
 const auth = getAuth(app);
 if (Astro.cookies.has("__session")) {
@@ -17,20 +18,30 @@ if (Astro.cookies.has("__session")) {
 ---
 
 <Layout title="Sign in">
-  
-  <h1>Sign in</h1>
-  <p>New here? <a href="/register">Create an account</a></p>
-  <form id="signin-form">
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email" required />
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required />
-    <button type="submit">Login</button>
-  </form>
-  <button id="google">Sign in with Google</button>
+  <div class="flex flex-col items-center justify-center h-[100vh]">
+    <div class="bg-white w-full max-w-md  shadow-md flex flex-col items-center rounded-md p-8">
+      <Image src={Logo} alt="Cherlist" aria-label="Cherlist logo" />
+      <form id="signin-form" class="flex flex-col w-full text-[#003246] text-sm">
+        <fieldset class="mb-4">
+          <input placeholder="Email Address" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1" type="email" name="email" id="email" required />
+        </fieldset>
+        <fieldset>
+          <input placeholder="Password" class="p-2 focus:outline-0  w-full border-b-[#003246] border-b-1" type="password" name="password" id="password" required />
+        </fieldset>
+        <button type="submit" class="w-full mt-4 mb-4 rounded-md bg-[#003246] text-white p-3 text-l cursor-pointer hover:bg-[#095870] ">Login</button>
+      </form>
+      <button id="google" class="google-signin-btn cursor-pointer">
+        <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" alt="Sign in with Google" />
+      </button>
+
+      <hr class="mt-6 mb-6 w-full "/>
+      <p class="text-sm text-[#003246]">New here? <a href="/register" class="underline text-[#003246] hover:text-[#095870]">Create an account</a></p>
+    </div>
+  </div>
 </Layout>
 
 <script>
+  console.log(import.meta.env)
   import {
     getAuth,
     inMemoryPersistence,

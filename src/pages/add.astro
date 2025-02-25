@@ -3,14 +3,19 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Add Task">
-  <h1>Add a Task</h1>
-  <form id="addTaskForm" enctype="multipart/form-data">
-    <label for="name">Task</label>
-    <input type="text" name="name" id="name" required />
+  
+  <div class="flex flex-col items-center justify-center h-[100vh]">
+    <div class="bg-white w-full max-w-md  shadow-md flex flex-col items-center rounded-md p-8">
+      <h1 class="w-full text-lg font-bold text-[#003246] border-b-1 border-[#003246] pb-2 mb-4">Add a Task</h1>
+      <form id="addTaskForm" enctype="multipart/form-data">
+        <input placeholder="Task Name" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" type="text" name="name" id="name" required />
 
-    <!-- Submit button -->
-    <button type="submit">Add Task</button>
-  </form>
+        <!-- Submit button -->
+        <button class="w-full mt-4 mb-4 rounded-md bg-[#003246] text-white p-3 text-l cursor-pointer hover:bg-[#095870] "  type="submit">Add Task</button>
+      </form>
+    </div>
+  </div>
+  
 </Layout>
 
 <script>

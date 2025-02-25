@@ -1,17 +1,25 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Image } from 'astro:assets';
+import Logo from '../images/logo.svg'
 ---
 
 <Layout title="Register">
-  <h1>Register</h1>
-  <p>Already have an account? <a href="/">Sign in</a></p>
-  <form action="/api/auth/register" method="post">
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" />
-    <label for="email" for="email">Email</label>
-    <input type="email" name="email" id="email" />
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" />
-    <button type="submit">Login</button>
-  </form>
+  <div class="flex flex-col items-center justify-center h-[100vh]">
+  <div class="bg-white w-full max-w-md shadow-md flex flex-col items-center rounded-md p-8">
+    <Image src={Logo} alt="Cherlist" aria-label="Cherlist logo" />
+    <h1 class="text-[#003246] text-md mt-4 mb-4 text-center">Sign up to Cherlist to stay motivated and productive with a consistency-driven to-do list that helps you build lasting habits.</h1>
+
+    <form class="flex flex-col w-full  text-[#003246] text-sm" action="/api/auth/register" method="post">
+      
+      <input placeholder="Full Name" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" type="text" name="name" id="name" />
+      <input placeholder="Email Address" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" type="email" name="email" id="email" />
+      <input placeholder="Password" type="password" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" name="password" id="password" />
+      <button class="w-full mt-4 mb-4 rounded-md bg-[#003246] text-white p-3 text-l cursor-pointer hover:bg-[#095870] " type="submit">Create Account</button>
+    </form>
+    <hr class="mt-6 mb-6 w-full "/>
+    <p class="text-sm text-[#003246]">Already have an account? <a href="/" class="underline text-[#003246] hover:text-[#095870]">Sign in</a></p>
+  </div>
+</div>
+  
 </Layout>
