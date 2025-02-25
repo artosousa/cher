@@ -5,7 +5,7 @@ interface Props {
 const { title } = Astro.props;
 import "../styles/global.css";
 import { getImage } from 'astro:assets'
-import faviconSrc from '../images/icon_1.png'
+import faviconSrc from '../images/icon_2.png'
 
 const appleTouchIcon = await getImage({
   src: faviconSrc,
@@ -21,7 +21,6 @@ const appleTouchIcon = await getImage({
 		<meta charset="UTF-8" />
 		<meta name="description" content="Astro description" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href={faviconSrc.src} type="image/svg+xml" />
     	<link rel="apple-touch-icon" href={appleTouchIcon.src} />
 		<meta name="generator" content={Astro.generator} />
