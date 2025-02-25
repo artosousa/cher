@@ -51,9 +51,13 @@ const CalendarComponent = ({ completedDates, onUpdateCompletedDates }: CalendarP
               border-radius:0.375rem;
             }
           .completed {
-            border-radius: 0.375rem;
+            
             background-color: #4caf50;
             color: white;
+          }
+          .completed:first-of-type{
+            border-top-left-radius:0.375rem;
+            border-bottom-left-radius:0.375rem;
           }
         `}
       </style>
