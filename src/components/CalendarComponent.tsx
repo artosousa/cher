@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import ReactCalendar from 'react-calendar';
 
@@ -19,10 +19,6 @@ const CalendarComponent = ({ completedDates, onUpdateCompletedDates }: CalendarP
 
   const tileClassName = ({ date }: { date: Date }) => {
     const normalizedDate = normalizeDate(date);
-    console.log({
-      formattedDates,
-      normalizedDate
-    });
     return formattedDates.includes(normalizedDate) ? 'completed' : '';
   };
 
@@ -30,19 +26,32 @@ const CalendarComponent = ({ completedDates, onUpdateCompletedDates }: CalendarP
     setDate(newDate);
   };
 
-  
-
   return (
     <div>
       <div className="calendar">
         <ReactCalendar
+          className="bg-black"
           value={date}
           tileClassName={tileClassName}
+          locale="en-US" // Set the locale to US English
         />
       </div>
       <style>
         {`
+          astro-island > div {
+            display:flex;
+            align-items:center;
+            justify-content:center;
+          }
+          .calendar {
+            width: 81.25% !important;
+            
+          }
+            .calendar > .react-calendar{
+              border-radius:0.375rem;
+            }
           .completed {
+            border-radius: 0.375rem;
             background-color: #4caf50;
             color: white;
           }

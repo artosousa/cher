@@ -72,16 +72,22 @@ const updateCompletedDates = async () => {
 <Layout title="My tasks">
   <div class="w-full flex flex-col items-center justify-center">
     <div class="w-full max-w-[90vw] lg:max-w-[65vw] flex flex-col h-[100%] items-center justify-center">
-      <header class="flex flex-row w-full justify-between items-center border-b-1 border-[#003246] pb-2 mb-16">
+      <header class="flex flex-row w-full justify-between items-center border-b-1 border-[#003246] pb-2 mb-8 lg:mb-16">
         <Image class="w-[200px]" src={Logo} alt="Cherlist" aria-label="Cherlist logo" />
         <div class="flex flex-row">
-          <a class="w-full text-center mt-4 mb-4 rounded-md bg-[#003246] text-white p-3 text-l cursor-pointer hover:bg-[#095870]" href="/add">Add New Task</a>
-          
+         
+          <form class="" action="/api/auth/signout" method="GET">
+            <button class="w-full mt-4 mb-4 rounded-md bg-gray-300 text-gray-700  p-3 text-l cursor-pointer hover:bg-[#999]" type="submit">Sign out</button>
+          </form>
         </div>
       </header>
-      <div class="w-full flex flex-col lg:flex-row gap-16 justify-center">
+      <div class="w-full flex flex-col lg:flex-row gap-8 lg:gap-16 justify-center">
         <div class="bg-white lg:min-w-[415px] w-full  shadow-md flex flex-col  rounded-md p-8">
-          <h1 class="text-lg font-bold text-[#003246] border-b-1 border-[#003246] pb-2 mb-4">My To Do List:</h1>
+         
+          <div class="items-end flex flex-row justify-between border-b-1 border-[#003246] pb-2 mb-4">
+             <h1 class="text-lg font-bold text-[#003246] ">My To Do List:</h1>
+             <a class=" w-fit text-center rounded-md bg-[#003246] text-white p-3 text-l cursor-pointer hover:bg-[#095870]" href="/add">Add to list</a>
+          </div>
           <ul id="task-list">
             {tasks.map((task) => (
               <li data-key={task.id} class={task.isComplete ? "line-through" : ""}>
@@ -101,7 +107,7 @@ const updateCompletedDates = async () => {
         
 
 
-        <div class="bg-white lg:min-w-[415px] w-full shadow-md flex flex-col items-center  rounded-md p-8">
+        <div class="bg-white lg:min-w-[415px] w-full shadow-md flex flex-col items-center  rounded-md p-8 mb-16">
           <h1 class="w-full text-lg font-bold text-[#003246] border-b-1 border-[#003246] pb-2 mb-4">Cher Streak:</h1>
           <CalendarComponent 
             client:load
@@ -117,9 +123,7 @@ const updateCompletedDates = async () => {
       
 
     </div>
-    <form class="bottom-0 absolute" action="/api/auth/signout" method="GET">
-      <button class="w-full mt-4 mb-4 rounded-md bg-gray-300 text-gray-700  p-3 text-l cursor-pointer hover:bg-[#999]" type="submit">Sign out</button>
-    </form>
+    
   </div>
   <script>
     
