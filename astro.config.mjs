@@ -8,7 +8,12 @@ export default defineConfig({
   adapter: netlify({
     assets: false, // Disable experimental feature
   }),
-  integrations: [react()],
+  integrations: [
+    react(),
+    tailwindcss({
+      applyBaseStyles: false,
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()]
   }

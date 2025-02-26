@@ -3,10 +3,18 @@ import { app } from "../firebase/server";
 import { getFirestore, Timestamp } from "firebase-admin/firestore"; 
 import { getAuth } from "firebase-admin/auth";
 import Layout from "../layouts/Layout.astro";
-import CalendarComponent from "../components/CalendarComponent.tsx"; 
 import { Image } from 'astro:assets';
 import Logo from '../images/logo.svg'
+import { Calendar } from "@/components/ui/calendar"
+import { Flame } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from "@/components/ui/card"
 
+import { Button } from "@/components/ui/button"
+import MyDialog from '@/components/mydialog'
 interface Task {
   id: string;
   name: string;
@@ -72,6 +80,7 @@ const uniqueDates = new Set(completedDates)
 ---
 
 <Layout title="My tasks">
+  
   <div class="w-full flex flex-col items-center justify-center">
     <div class="w-full max-w-[90vw] lg:max-w-[65vw] flex flex-col h-[100%] items-center justify-center">
       <header class="flex flex-row w-full justify-between items-center border-b-1 border-[#003246] pb-2 mb-8 lg:mb-16">
@@ -79,60 +88,61 @@ const uniqueDates = new Set(completedDates)
         <div class="flex flex-row">
          
           <form class="" action="/api/auth/signout" method="GET">
-            <button class="w-full mt-4 mb-4 rounded-md bg-gray-300 text-gray-700  p-3 text-l cursor-pointer hover:bg-[#999]" type="submit">Sign out</button>
+            <Button className="transition-colors duration-300 bg-neutral-300 text-gray-500 hover:bg-neutral-950 hover:text-white " type="submit">Sign Out</Button>
           </form>
         </div>
       </header>
       <div class="w-full flex flex-col lg:flex-row gap-8 lg:gap-16 justify-center">
-        <div class="bg-white lg:min-w-[415px] w-full  shadow-md flex flex-col  rounded-md p-8">
-         
-          <div class="items-end flex flex-row justify-between border-b-1 border-[#003246] pb-2 mb-4">
-             <h1 class="text-lg font-bold text-[#003246] ">My To Do List:</h1>
-             <a class=" w-fit text-center rounded-md bg-[#003246] text-white p-3 text-l cursor-pointer hover:bg-[#095870]" href="/add">Add Task</a>
-          </div>
-          {tasks.length > 0 ? (
-            <ul id="task-list">
-              {tasks.map((task) => (
-                <li class={task.isComplete ? "line-through" : ""}>
-                  <input
-                    id={task.name?.replace(/\s+/g, '')}
-                    type="checkbox"
-                    checked={task.isComplete}
-                    data-id={task.id}
-                    class="task-checkbox"
-                    onchange={`updateTaskStatus(event, '${task.id}')`} 
-                  />
-                  <label for={task.name?.replace(/\s+/g, '')}>
-                    {task.name ?? 'Unnamed Task'}
-                  </label>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div class="w-full h-[100%] flex flex-col items-center justify-center">
-              <p class="mb-4">YOUR LIST IS CURRENTLY EMPTY!</p>
-              <a class=" w-[50%] cy text-center rounded-md bg-[#003246] text-white p-3 text-l cursor-pointer hover:bg-[#095870]" href="/add">Add Task</a>
-            </div>
-          )}
-        </div>
+        <Card className="py-4 lg:min-w-[415px] w-full flex flex-col gap-1">
+          <CardHeader className=" pb-4 flex flex-row items-center justify-between border-b-1 ">
+            <h1 class="text-lg font-bold text-[#003246] ">My To Do List:</h1>
+            
+            <MyDialog client:load/>
+          </CardHeader>
+          <CardContent className="h-[100%] px-4 gap-0">
+            {tasks.length > 0 ? (
+              <ul id="task-list">
+                {tasks.map((task) => (
+                  <li class={`last-of-type:border-b-0 py-2 border-b-1 flex flex-row gap-3 items-center ${task.isComplete ? "line-through text-gray-400" : ""}`}>
+                    
+                    <input
+                      id={task.name?.replace(/\s+/g, '')}
+                      type="checkbox"
+                      checked={task.isComplete}
+                      data-id={task.id}
+                      class="task-checkbox"
+                      onchange={`updateTaskStatus(event, '${task.id}')`} 
+                    />
+                    <label for={task.name?.replace(/\s+/g, '')}>
+                      {task.name ?? 'Unnamed Task'}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div class="w-full h-[100%] flex flex-col items-center justify-center">
+                <p class="mb-4">YOUR LIST IS CURRENTLY EMPTY!</p>
+                <MyDialog  client:load/>
+                
+              </div>
+            )}
+          </CardContent>
+        </Card>
         
-
-
-        <div class="bg-white lg:min-w-[415px] w-full shadow-md flex flex-col items-center  rounded-md p-8 mb-16">
-          <div class="w-full flex flex-row justify-between text-lg font-bold text-[#003246] border-b-1 border-[#003246] pb-2 mb-4">
+        <Card className="w-full lg:max-w-[290px] h-fit">
+          <CardHeader className="pb-4 flex flex-row items-center justify-between border-b-1 ">
             <h2 class="">Cher Streak:</h2>
-            <h3>{uniqueDates.size} Day{uniqueDates.size > 1 ? 's' : ''}</h3>
-          </div>
-          <CalendarComponent 
-            client:load
-            completedDates={completedDates} 
-            onUpdateCompletedDates={async () => {
-              const updatedDates = await updateCompletedDates();
-              // Trigger the update in the parent component
-              document.dispatchEvent(new CustomEvent('update-completed-dates', { detail: updatedDates }));
-            }}
-          />
-        </div>
+            <h3 class="flex flex-row gap-1"><Flame color="#b31e1e" fill="#f0ae21" />{uniqueDates.size} Day{uniqueDates.size > 1 ? 's' : ''}</h3>
+          </CardHeader>
+          <CardContent className="flex items-center justify-center">
+            <Calendar
+              client:load
+              mode="single"
+              completedDates={completedDates}
+            />
+          </CardContent>
+        </Card>
+
       </div>
       
 
@@ -179,6 +189,7 @@ const uniqueDates = new Set(completedDates)
       }
     })
   });
+  
 </script>
 
 

@@ -5,6 +5,12 @@
     "moduleResolution": "node", // Ensures modules are resolved correctly
     "esModuleInterop": true, // Allows default imports from modules with no default export
     "strict": true, // Enables strict mode
-    "skipLibCheck": true // Skip type checking of declaration files
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   }
 }
