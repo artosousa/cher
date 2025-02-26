@@ -8,14 +8,8 @@ import { buttonVariants } from "@/components/ui/button"
 interface CalendarProps extends Record<string, any> {
   completedDates: string[];
 }
-function convertToLocalDate(dateString: string): Date {
-  const [year, month, day] = dateString.split('-').map(Number);
-  return new Date(year, month - 1, day);
-}
+
 function Calendar({ className, classNames, completedDates = [], showOutsideDays = true, ...props }: CalendarProps) {
-  // Function to normalize Date to YYYY-MM-DD format
-  
-  const normalizeDate = (d: Date) => d.toISOString().split("T")[0];
   
 
   return (
