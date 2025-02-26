@@ -9,14 +9,11 @@ interface CalendarProps extends Record<string, any> {
   completedDates: string[];
 }
 function convertToLocalDate(dateString: string): Date {
-  const [year, month, day] = dateString.split('-').map(Number);
+  const formattedDateString = dateString.replace(/\//g, '-');
+  const [year, month, day] = formattedDateString.split('-').map(Number)
   return new Date(year, month - 1, day);
 }
 function Calendar({ className, classNames, completedDates = [], showOutsideDays = true, ...props }: CalendarProps) {
-  
-  // Function to normalize Date to YYYY-MM-DD format
-  const normalizeDate = (d: Date) => d.toISOString().split("T")[0];
-  
   console.log({
     completedDates
   })
@@ -52,13 +49,13 @@ function Calendar({ className, classNames, completedDates = [], showOutsideDays 
         ),
         day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
         day_today: " text-accent-foreground",
-        day_outside: "bg-pink day-outside text-muted-foreground aria-selected:text-muted-foreground",
+        day_outside: "day-outside text-muted-foreground aria-selected:text-muted-foreground",
         day_disabled: "text-muted-foreground opacity-50",
         day_hidden: "invisible",
         ...classNames,
       }}
       modifiers={{
-        completed: completedDates.map(date => new Date(normalizeDate(convertToLocalDate(date)))), // Convert to Date after normalization
+        completed: completedDates.map(convertToLocalDate), // Define completed dates
       }}
       modifiersClassNames={{
         completed: "!bg-[#003246] !text-white !rounded-full", // Apply class to completed dates
