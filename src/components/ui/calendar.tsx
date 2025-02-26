@@ -9,8 +9,13 @@ interface CalendarProps extends Record<string, any> {
   completedDates: string[];
 }
 function convertToLocalDate(dateString: string): Date {
-  const formattedDateString = dateString.replace(/\//g, '-');
-  const [year, month, day] = formattedDateString.split('-').map(Number)
+  // Check for the presence of '/' or '-' and normalize accordingly
+  const separator = dateString.includes('/') ? '/' : '-';
+  
+  // Split the date string and ensure it's in YYYY-MM-DD format
+  const [year, month, day] = dateString.split(separator).map(Number);
+  
+  // Return the Date object using the normalized format
   return new Date(year, month - 1, day);
 }
 function Calendar({ className, classNames, completedDates = [], showOutsideDays = true, ...props }: CalendarProps) {
