@@ -8,18 +8,18 @@ import { buttonVariants } from "@/components/ui/button"
 interface CalendarProps extends Record<string, any> {
   completedDates: string[];
 }
+
 function convertToLocalDate(dateString: string): Date {
-  // Check for the presence of '/' or '-' and normalize accordingly
-  const separator = dateString.includes('/') ? '/' : '-';
-  
-  // Split the date string and ensure it's in YYYY-MM-DD format
-  const [year, month, day] = dateString.split(separator).map(Number);
-  
-  // Return the Date object using the normalized format
-  return new Date(year, month - 1, day);
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);  // Return a Date object
 }
+
 function Calendar({ className, classNames, completedDates = [], showOutsideDays = true, ...props }: CalendarProps) {
-  console.log(completedDates.map(convertToLocalDate))
+  // Convert completedDates to Date objects
+  const normalizedCompletedDates = completedDates.map(convertToLocalDate);
+  console.log({
+    normalizedCompletedDates
+  })
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -48,17 +48,17 @@ function Calendar({ className, classNames, completedDates = [], showOutsideDays 
         ),
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "size-8 p-0 font-normal aria-selected:opacity-100 "
+          "size-8 p-0 font-normal aria-selected:opacity-100"
         ),
         day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
-        day_today: " text-accent-foreground",
+        day_today: "bg-accent text-accent-foreground",
         day_outside: "day-outside text-muted-foreground aria-selected:text-muted-foreground",
         day_disabled: "text-muted-foreground opacity-50",
         day_hidden: "invisible",
         ...classNames,
       }}
       modifiers={{
-        completed: completedDates.map(convertToLocalDate), // Define completed dates
+        completed: normalizedCompletedDates, // Now passing Date[] array
       }}
       modifiersClassNames={{
         completed: "!bg-[#003246] !text-white !rounded-full", // Apply class to completed dates
