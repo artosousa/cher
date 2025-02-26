@@ -19,9 +19,7 @@ function convertToLocalDate(dateString: string): Date {
   return new Date(year, month - 1, day);
 }
 function Calendar({ className, classNames, completedDates = [], showOutsideDays = true, ...props }: CalendarProps) {
-  console.log({
-    completedDates
-  })
+  console.log(completedDates.map(convertToLocalDate))
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
