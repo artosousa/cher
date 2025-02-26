@@ -38,7 +38,7 @@ import Logo from '../images/logo.svg'
     name: string;
   }
   const taskInput = document.getElementById('name')
-  console.log(taskInput)
+  
   document.addEventListener("DOMContentLoaded", () => {
     taskInput?.click()
   })
@@ -73,7 +73,7 @@ import Logo from '../images/logo.svg'
         console.error("Failed to add task:", errorText);
         alert(`Failed to add task: ${errorText}`);
       } else {
-        console.log("Task added successfully!");
+        
         window.location.href = "/dashboard"; // Redirect on success
       }
     } catch (error) {

@@ -14,7 +14,7 @@ function convertToLocalDate(dateString: string): Date {
 }
 function Calendar({ className, classNames, completedDates = [], showOutsideDays = true, ...props }: CalendarProps) {
   // Function to normalize Date to YYYY-MM-DD format
-  console.log(completedDates.map(date => new Date(date)))
+  
   const normalizeDate = (d: Date) => d.toISOString().split("T")[0];
   
 

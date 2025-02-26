@@ -6,7 +6,7 @@ import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
 import Logo from '../images/logo.svg'
 import { Calendar } from "@/components/ui/calendar"
-import { Flame } from 'lucide-react';
+import { Flame, Frown } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -131,8 +131,15 @@ const uniqueDates = new Set(completedDates)
         
         <Card className="w-full lg:max-w-[290px] h-fit">
           <CardHeader className="pb-4 flex flex-row items-center justify-between border-b-1 ">
-            <h2 class="">Cher Streak:</h2>
-            <h3 class="flex flex-row gap-1"><Flame color="#b31e1e" fill="#f0ae21" />{uniqueDates.size} Day{uniqueDates.size > 1 ? 's' : ''}</h3>
+            <h2 class="">Current Streak:</h2>
+            <h3 class="flex flex-row gap-1">
+              {uniqueDates.size > 0 ? (
+                <Flame color="#b31e1e" fill="#f0ae21" />
+              ): (
+                <Frown color="black" fill="#f0ae21"/>
+              )}
+              {uniqueDates.size} {uniqueDates.size === 0 || uniqueDates.size > 1 ? 'Days' : 'Day'}
+            </h3>
           </CardHeader>
           <CardContent className="flex items-center justify-center">
             <Calendar
