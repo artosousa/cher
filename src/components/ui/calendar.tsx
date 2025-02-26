@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChevronLeft, ChevronRight, LogOut  `` } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { DayPicker } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
@@ -17,9 +17,8 @@ function Calendar({ className, classNames, completedDates = [], showOutsideDays 
  
   const normalizeDate = (d: Date) => d.toISOString().split("T")[0];
   
-   console.log({
-    completedDates,
-    normalizeDate
+  console.log({
+    completedDates
   })
   return (
     <DayPicker
