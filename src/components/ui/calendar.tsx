@@ -8,14 +8,16 @@ import { buttonVariants } from "@/components/ui/button"
 interface CalendarProps extends Record<string, any> {
   completedDates: string[];
 }
-function convertToLocalDate(date: string): Date {
-  const [year, month, day] = date.split('-').map(Number); // Extract year, month, and day
-  const localDate = new Date(year, month - 1, day); // Create a Date object in local time
-  localDate.setHours(0, 0, 0, 0); // Normalize the time to midnight
-  return localDate;
+function convertToLocalDate(dateString: string): Date {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
 }
 function Calendar({ className, classNames, completedDates = [], showOutsideDays = true, ...props }: CalendarProps) {
-  console.log(completedDates.map(date => convertToLocalDate(date)))
+  // Function to normalize Date to YYYY-MM-DD format
+  
+  const normalizeDate = (d: Date) => d.toISOString().split("T")[0];
+  
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -54,7 +56,7 @@ function Calendar({ className, classNames, completedDates = [], showOutsideDays 
         ...classNames,
       }}
       modifiers={{
-        completed: completedDates.map(date => convertToLocalDate(date)), // Convert each string date to a Date object
+        completed: completedDates.map(date => new Date(date)), // Define completed dates
       }}
       modifiersClassNames={{
         completed: "bg-green-500 text-white", // Apply class to completed dates
