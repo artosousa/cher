@@ -13,8 +13,8 @@ function convertToLocalDate(dateString: string): Date {
   return new Date(year, month - 1, day);
 }
 function Calendar({ className, classNames, completedDates = [], showOutsideDays = true, ...props }: CalendarProps) {
+  
   // Function to normalize Date to YYYY-MM-DD format
- 
   const normalizeDate = (d: Date) => d.toISOString().split("T")[0];
   
   console.log({
@@ -58,7 +58,7 @@ function Calendar({ className, classNames, completedDates = [], showOutsideDays 
         ...classNames,
       }}
       modifiers={{
-        completed: completedDates.map(convertToLocalDate), // Define completed dates
+        completed: completedDates.map(date => new Date(normalizeDate(convertToLocalDate(date)))), // Convert to Date after normalization
       }}
       modifiersClassNames={{
         completed: "!bg-[#003246] !text-white !rounded-full", // Apply class to completed dates
