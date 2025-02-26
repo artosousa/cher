@@ -46,20 +46,20 @@ function Calendar({ className, classNames, completedDates = [], showOutsideDays 
         ),
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "size-8 p-0 font-normal aria-selected:opacity-100"
+          "size-8 p-0 font-normal aria-selected:opacity-100 "
         ),
         day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
-        day_today: "bg-accent text-accent-foreground",
-        day_outside: "day-outside text-muted-foreground aria-selected:text-muted-foreground",
+        day_today: " text-accent-foreground",
+        day_outside: "bg-pink day-outside text-muted-foreground aria-selected:text-muted-foreground",
         day_disabled: "text-muted-foreground opacity-50",
         day_hidden: "invisible",
         ...classNames,
       }}
       modifiers={{
-        completed: completedDates.map(date => new Date(date)), // Define completed dates
+        completed: completedDates.map(convertToLocalDate), // Define completed dates
       }}
       modifiersClassNames={{
-        completed: "bg-green-500 text-white", // Apply class to completed dates
+        completed: "!bg-[#003246] !text-white !rounded-full", // Apply class to completed dates
       }}
       components={{
         IconLeft: ({ className, ...props }) => (

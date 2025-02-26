@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Rocket } from "lucide-react";
+import { Plus, List } from "lucide-react";
 
 const MyDialog = () => {
   const [taskName, setTaskName] = useState<string>(""); // State for task name
@@ -73,13 +73,13 @@ const MyDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" title='Add new task'>
           <Plus />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="flex flex-row gap-2 items-center"> Add Task <Rocket color="black"  /></DialogTitle>
+          <DialogTitle className="flex flex-row gap-2 items-center"> Add Task <List color="black"  /></DialogTitle>
           <DialogDescription>
             Every task you complete is a step closer to your goals! Keep your momentum and watch your progress grow!
           </DialogDescription>

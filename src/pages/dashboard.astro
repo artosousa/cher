@@ -6,7 +6,7 @@ import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
 import Logo from '../images/logo.svg'
 import { Calendar } from "@/components/ui/calendar"
-import { Flame, Frown } from 'lucide-react';
+import { Flame, Frown, LogOut } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -77,6 +77,35 @@ const updateCompletedDates = async () => {
 };
 
 const uniqueDates = new Set(completedDates)
+
+const getStreakCount = (dates: string[]): number => {
+  if (dates.length === 0) return 0; // No streak if no dates
+  if (dates.length === 1) return 1; // A single date counts as a streak
+
+  const sortedDates = [...new Set(dates)]
+    .map(date => new Date(date))
+    .sort((a, b) => a.getTime() - b.getTime());
+
+  let streak = 1; // Start at 1 since we have at least one date
+  let maxStreak = 1;
+
+  for (let i = 1; i < sortedDates.length; i++) {
+    const prevDate = sortedDates[i - 1];
+    const currDate = sortedDates[i];
+
+    const diffInDays = (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (diffInDays === 1) {
+      streak++;
+      maxStreak = Math.max(maxStreak, streak);
+    } else {
+      streak = 1; // Reset streak to 1, not 0, since the current date still counts as a streak start
+    }
+  }
+
+  return maxStreak;
+};
+const streakCount = getStreakCount([...uniqueDates])
 ---
 
 <Layout title="My tasks">
@@ -88,7 +117,7 @@ const uniqueDates = new Set(completedDates)
         <div class="flex flex-row">
          
           <form class="" action="/api/auth/signout" method="GET">
-            <Button className="transition-colors duration-300 bg-neutral-300 text-gray-500 hover:bg-neutral-950 hover:text-white " type="submit">Sign Out</Button>
+            <Button title="Sign Out" aria-label="Sign out button" className="transition-colors duration-300 bg-neutral-300 text-gray-500 hover:bg-neutral-950 hover:text-white " type="submit"><LogOut /> Sign Out</Button>
           </form>
         </div>
       </header>
@@ -133,12 +162,13 @@ const uniqueDates = new Set(completedDates)
           <CardHeader className="pb-4 flex flex-row items-center justify-between border-b-1 ">
             <h2 class="">Current Streak:</h2>
             <h3 class="flex flex-row gap-1">
-              {uniqueDates.size > 0 ? (
-                <Flame color="#b31e1e" fill="#f0ae21" />
-              ): (
-                <Frown color="black" fill="#f0ae21"/>
+              {streakCount === 0 ? (
+                <Frown color="#003246"/>
+              ) : (
+                <Flame  color="#003246"  />
               )}
-              {uniqueDates.size} {uniqueDates.size === 0 || uniqueDates.size > 1 ? 'Days' : 'Day'}
+              
+              {streakCount} {streakCount === 1 ? 'Day' : 'Days'}
             </h3>
           </CardHeader>
           <CardContent className="flex items-center justify-center">
