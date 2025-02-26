@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, LogOut  `` } from "lucide-react"
 import { DayPicker } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
@@ -14,10 +14,13 @@ function convertToLocalDate(dateString: string): Date {
 }
 function Calendar({ className, classNames, completedDates = [], showOutsideDays = true, ...props }: CalendarProps) {
   // Function to normalize Date to YYYY-MM-DD format
-  
+ 
   const normalizeDate = (d: Date) => d.toISOString().split("T")[0];
   
-
+   console.log({
+    completedDates,
+    normalizeDate
+  })
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
