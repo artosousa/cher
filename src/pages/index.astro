@@ -44,6 +44,7 @@ if (Astro.cookies.has("__session")) {
             <input placeholder="Password" class="p-2 focus:outline-0  w-full border-b-[#003246] border-b-1" type="password" name="password" id="password" required />
           </fieldset>
           <Button className="cursor-pointer transition-colors duration-300 mt-4 mb-4 w-full bg-[#003246] text-white  hover:bg-[#095870] " type="submit">Login</Button>
+          <div id="errorMessage"></div>
         </form>
         <div class="flex text-gray-400 flex-row w-full items-center justify-center gap-4 before:content-[''] before:border-t-1 before:w-[40%] after:content-[''] after:border-t-1 after:w-[40%] mb-4">or</div>
         <Button id="google"
@@ -78,13 +79,7 @@ if (Astro.cookies.has("__session")) {
         <p class="text-sm text-[#003246]">New here? <a href="/register" class="underline text-[#003246] hover:text-[#095870]">Create an account</a></p>
       </CardFooter>
     </Card>
-    <!-- <div class="bg-white w-full max-w-[90%] lg:max-w-md  shadow-md flex flex-col items-center rounded-md p-8">
-      
-      
-      
-      <hr class="mt-6 mb-6 w-full "/>
-      <p class="text-sm text-[#003246]">New here? <a href="/register" class="underline text-[#003246] hover:text-[#095870]">Create an account</a></p>
-    </div> -->
+    
   </div>
 </Layout>
 
@@ -104,13 +99,14 @@ if (Astro.cookies.has("__session")) {
 
   // Use type assertion to ensure `form` is treated as HTMLFormElement
   const form = document.getElementById("signin-form") as HTMLFormElement;
-  
+  let showError = false;
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
-
+    const errMsgDiv = document.getElementById('errorMessage')
+    console.log(errMsgDiv)
     if (!email || !password) {
       return;
     }
@@ -132,6 +128,33 @@ if (Astro.cookies.has("__session")) {
         window.location.assign(response.url);
       }
     } catch (error) {
+      showError = true
+      if (showError){
+        if (errMsgDiv) {
+          errMsgDiv.innerHTML = `
+            <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+              <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+              </svg>
+              <span class="sr-only">Info</span>
+              <div>
+                <span class="font-medium">UH OH!</span> Error signing in. Please try again with correct Email & Password.
+              </div>
+            </div>
+          `;
+        }
+        const inputs = form.querySelectorAll('input')
+
+        inputs.forEach(input => {
+          input.addEventListener('click', (e) => {
+            if(errMsgDiv){
+              errMsgDiv.innerHTML = ``
+            }
+            
+          });
+        });
+      }
+
       console.error("Error signing in:", error);
     }
   });
