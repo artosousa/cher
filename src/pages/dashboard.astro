@@ -165,7 +165,7 @@ const streakCount = getStreakCount([...uniqueDates])
               {streakCount === 0 ? (
                 <Frown color="#003246"/>
               ) : (
-                <Flame  color="#003246"  />
+                <Flame  color={streakCount >= 5 ? 'orange' : '#003246'} fill={streakCount >= 5 ? "orange" : "#fff"}  />
               )}
               
               {streakCount} {streakCount === 1 ? 'Day' : 'Days'}
@@ -176,6 +176,7 @@ const streakCount = getStreakCount([...uniqueDates])
               client:load
               mode="single"
               completedDates={completedDates}
+              {streakCount}
             />
           </CardContent>
         </Card>

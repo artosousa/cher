@@ -1,16 +1,54 @@
-import * as React from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { DayPicker } from "react-day-picker"
+import * as React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { DayPicker } from "react-day-picker";
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 interface CalendarProps extends Record<string, any> {
   completedDates: string[];
+  streakCount: number;
 }
 
-function Calendar({ className, classNames, completedDates = [], showOutsideDays = true, ...props }: CalendarProps) {
-  
+function Calendar({ className, classNames, completedDates = [], streakCount, showOutsideDays = true, ...props }: CalendarProps) {
+  // Convert completedDates to Date objects and normalize to the start of the day
+  const completedDateObjects = completedDates.map(date => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  });
+
+  // Function to determine streak dates
+  const getStreakDates = () => {
+    if (streakCount === 0) return []; // No streak, return empty array
+
+    const sortedDates = [...completedDateObjects].sort((a, b) => a.getTime() - b.getTime());
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize today to the start of the day
+
+    let streakDates: Date[] = [];
+    let count = 0;
+    let lastDate = today;
+
+    for (let i = sortedDates.length - 1; i >= 0; i--) {
+      const currentDate = sortedDates[i];
+
+      // Check if this date is consecutive with the last added date
+      if (count === 0 || (lastDate.getTime() - currentDate.getTime()) === 86400000) {
+        streakDates.push(currentDate);
+        lastDate = currentDate;
+        count++;
+      } else {
+        break; // Streak is broken
+      }
+
+      if (count >= streakCount) break; // Stop when we reach the streak length
+    }
+
+    return streakDates;
+  };
+
+  const streakDates = getStreakDates();
 
   return (
     <DayPicker
@@ -50,10 +88,12 @@ function Calendar({ className, classNames, completedDates = [], showOutsideDays 
         ...classNames,
       }}
       modifiers={{
-        completed: completedDates.map(date => new Date(date)), // Define completed dates
+        completed: completedDateObjects,
+        streak: streakDates, // Apply streak-specific modifier
       }}
       modifiersClassNames={{
-        completed: "bg-green-500 text-white", // Apply class to completed dates
+        completed: "!bg-[#003246] !text-white !rounded-full border-2 border-white", // Default completed date style
+        streak: "!bg-[#ffa500] !text-white !rounded-full border-2 border-white", // Streak-specific style
       }}
       components={{
         IconLeft: ({ className, ...props }) => (
@@ -65,7 +105,7 @@ function Calendar({ className, classNames, completedDates = [], showOutsideDays 
       }}
       {...props}
     />
-  )
+  );
 }
 
-export { Calendar }
+export { Calendar };
