@@ -2,24 +2,41 @@
 import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
 import Logo from '../images/logo.svg'
+
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 ---
 
 <Layout title="Register">
   <div class="flex flex-col items-center justify-center h-[100vh]">
-    <div class="bg-white w-full max-w-[90%] lg:max-w-md  shadow-md flex flex-col items-center rounded-md p-8">
-      <Image src={Logo} alt="Cherlist" aria-label="Cherlist logo" />
-      <h1 class="text-[#003246] text-md mt-4 mb-4 text-center">Sign up to Cherlist to stay motivated and productive with a consistency-driven to-do list that helps you build lasting habits.</h1>
-
-      <form class="flex flex-col w-full  text-[#003246] text-sm" action="/api/auth/register" method="post">
+    <Card className="w-full max-w-[90%] lg:max-w-md ">
+      <CardHeader>
+        <CardTitle className="items-center justify-center flex flex-col">
+          <Image src={Logo} alt="Cherlist" aria-label="Cherlist logo" />
+          <h1 class="text-[#003246] font-light leading-[1.5rem] text-md mt-4 mb-4 text-center">Sign up to Cherlist to stay motivated and productive with a consistency-driven to-do list that helps you build lasting habits.</h1>
+        </CardTitle>
+      </CardHeader>  
+      <CardContent className="flex flex-col items-center justify-center">
+        <form class="flex flex-col w-full  text-[#003246] text-sm" action="/api/auth/register" method="post">
         
-        <input placeholder="Full Name" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" type="text" name="name" id="name" />
-        <input placeholder="Email Address" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" type="email" name="email" id="email" />
-        <input placeholder="Password" type="password" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" name="password" id="password" />
-        <button class="w-full mt-4 mb-4 rounded-md bg-[#003246] text-white p-3 text-l cursor-pointer hover:bg-[#095870] " type="submit">Create Account</button>
-      </form>
-      <hr class="mt-6 mb-6 w-full "/>
-      <p class="text-sm text-[#003246]">Already have an account? <a href="/" class="underline text-[#003246] hover:text-[#095870]">Sign in</a></p>
+          <input placeholder="Full Name" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" type="text" name="name" id="name" />
+          <input placeholder="Email Address" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" type="email" name="email" id="email" />
+          <input placeholder="Password" type="password" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1 mb-4" name="password" id="password" />
+          <Button className="cursor-pointer transition-colors duration-300 mt-4 mb-4 w-full bg-[#003246] text-white  hover:bg-[#095870] " type="submit">Create Account</Button>
+          
+        </form>
+      </CardContent>
+      <CardFooter className="mt-6 mb-6 w-full flex flex-row items-center justify-center">
+        <p class="text-sm text-[#003246]">Already have an account? <a href="/" class="underline text-[#003246] hover:text-[#095870]">Sign in</a></p>
+      </CardFooter>
+    </Card>
+    
   </div>
-</div>
   
 </Layout>

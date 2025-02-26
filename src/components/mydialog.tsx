@@ -81,8 +81,7 @@ const MyDialog = () => {
         <DialogHeader>
           <DialogTitle className="flex flex-row gap-2 items-center"> Add Task <Rocket color="black"  /></DialogTitle>
           <DialogDescription>
-            Every task you complete is a step closer to your goals! <br />
-            Keep your momentum and watch your progress grow!
+            Every task you complete is a step closer to your goals! Keep your momentum and watch your progress grow!
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

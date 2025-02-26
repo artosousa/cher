@@ -34,7 +34,8 @@ if (Astro.cookies.has("__session")) {
           <Image src={Logo} alt="Cherlist" aria-label="Cherlist logo" />
           <h1 class="text-[#003246] font-light leading-[1.5rem] text-md mt-4 mb-4 text-center">Welcome to Cherlist! Stay motivated and productive with a consistency-driven to-do list that helps you build lasting habits.</h1>
         </CardTitle>
-        <CardContent className="flex flex-col items-center justify-center">
+      </CardHeader>
+      <CardContent className="flex flex-col items-center justify-center">
         <form id="signin-form" class="flex flex-col w-full text-[#003246] text-sm">
           <fieldset class="mb-4">
             <input placeholder="Email Address" class="p-2 focus:outline-0 w-full border-b-[#003246] border-b-1" type="email" name="email" id="email" required />
@@ -72,11 +73,10 @@ if (Astro.cookies.has("__session")) {
           </div>
           <span class="text-sm text-white tracking-wider">Sign in with Google</span>
         </Button>
-        </CardContent>
-        <CardFooter className="mt-6 mb-6 w-full flex flex-row items-center justify-center">
-          <p class="text-sm text-[#003246]">New here? <a href="/register" class="underline text-[#003246] hover:text-[#095870]">Create an account</a></p>
-        </CardFooter>
-      </CardHeader>
+      </CardContent>
+      <CardFooter className="mt-6 mb-6 w-full flex flex-row items-center justify-center">
+        <p class="text-sm text-[#003246]">New here? <a href="/register" class="underline text-[#003246] hover:text-[#095870]">Create an account</a></p>
+      </CardFooter>
     </Card>
     <!-- <div class="bg-white w-full max-w-[90%] lg:max-w-md  shadow-md flex flex-col items-center rounded-md p-8">
       
