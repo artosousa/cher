@@ -39,7 +39,7 @@ function Calendar({ className, classNames, completedDates = [], showOutsideDays 
         head_cell: "text-muted-foreground rounded-md w-8 font-normal text-[0.8rem]",
         row: "flex w-full mt-2",
         cell: cn(
-          "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 ",
+          "relative p-0 text-center text-sm focus-within:relative focus-within:z-20",
           props.mode === "range"
             ? "[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md"
             : "[&:has([aria-selected])]:rounded-md"
@@ -51,7 +51,7 @@ function Calendar({ className, classNames, completedDates = [], showOutsideDays 
         day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
         day_today: "bg-accent text-accent-foreground",
         day_outside: "day-outside text-muted-foreground aria-selected:text-muted-foreground",
-        day_disabled: "text-muted-foreground opacity-50 ",
+        day_disabled: "text-muted-foreground opacity-50",
         day_hidden: "invisible",
         ...classNames,
       }}
@@ -59,7 +59,7 @@ function Calendar({ className, classNames, completedDates = [], showOutsideDays 
         completed: completedDates.map(date => new Date(date)), // Define completed dates
       }}
       modifiersClassNames={{
-        completed: "bg-green-500 text-white first-of-type:rounded-[0px]", // Apply class to completed dates
+        completed: "bg-green-500 text-white", // Apply class to completed dates
       }}
       components={{
         IconLeft: ({ className, ...props }) => (
